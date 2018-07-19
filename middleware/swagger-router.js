@@ -161,10 +161,16 @@ var getMockValue = function (version, schema) {
 
     break;
 
-  case 'object':
+    case 'object':
     value = {};
 
     _.each(schema.allOf, function (parentSchema) {
+      // quick fix, refactor it later.
+      _.each(parentSchema.allOf, function (parentSchema) {
+        _.each(parentSchema.properties, function (property, propName) {
+          value[propName] = getMockValue(version, property);
+        });
+      });
       _.each(parentSchema.properties, function (property, propName) {
         value[propName] = getMockValue(version, property);
       });
